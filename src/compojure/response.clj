@@ -19,13 +19,16 @@
     (response/content-type response mime-type)
     response))
 
+(defn- html-response [body]
+  (-> (response/response body)
+      (response/content-type "text/html; charset=utf-8")))
+
 (extend-protocol Renderable
   nil
   (render [_ _] nil)
   String
   (render [body _]
-    (-> (response/response body)
-        (response/content-type "text/html; charset=utf-8")))
+    (html-response body))
   clojure.lang.APersistentMap
   (render [resp-map _]
     (merge (with-meta (response/response "") (meta resp-map))
@@ -40,12 +43,10 @@
         (guess-content-type file)))
   clojure.lang.ISeq
   (render [coll _]
-    (-> (response/response coll)
-        (response/content-type "text/html; charset=utf-8")))
+    (html-response coll))
   clojure.lang.APersistentVector
   (render [coll _]
-    (-> (response/response coll)
-        (response/content-type "text/html; charset=utf-8")))
+    (html-response coll))
   java.io.InputStream
   (render [stream _] (response/response stream))
   java.net.URL
