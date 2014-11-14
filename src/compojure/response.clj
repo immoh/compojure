@@ -42,6 +42,10 @@
   (render [coll _]
     (-> (response/response coll)
         (response/content-type "text/html; charset=utf-8")))
+  clojure.lang.APersistentVector
+  (render [coll _]
+    (-> (response/response coll)
+        (response/content-type "text/html; charset=utf-8")))
   java.io.InputStream
   (render [stream _] (response/response stream))
   java.net.URL
